@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<project name="Paper Review System" default="build">
+	<property name="src.dir" value="src" />
+	<property name="web.dir" value="war" />
+	<property name="build.dir" value="${web.dir}/WEB-INF/classes" />
+	<property name="name" value="Paper Review System" />
+
+	<path id="master-classpath">
+		<fileset dir="${web.dir}/WEB-INF/lib">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement path="${build.dir}" />
+	</path>
+
+	<target name="build" description="Main build target">
+		<mkdir dir="${build.dir}" />
+		<javac destdir="${build.dir}">
+			<src path="${src.dir}" />
+			<classpath refid="master-classpath" />
+		</javac>
+	</target>
+
+	<target name="clean" description="Empties build dir.">
+		<delete>
+			<fileset dir="${build.dir}">
+				<include name="**/*.class" />
+			</fileset>
+		</delete>
+	</target>
+</project>
