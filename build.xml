@@ -4,7 +4,7 @@
 	<property name="app.path"      value="/${app.name}"/>
 	<property name="app.version"   value="0.1-dev"/>
 	<property name="build.home"    value="${basedir}/build"/>
-	<property name="catalina.home" value="/var/lib/tomcat7/"/> 
+	<property name="catalina.home" value="/usr/share/tomcat7/"/> 
 	<property name="dist.home"     value="${basedir}/dist"/>
 	<property name="docs.home"     value="${basedir}/docs"/>
 	<property name="manager.url"   value="http://localhost:8080/manager/text"/>
@@ -14,7 +14,7 @@
 	<property name="web.home"      value="${basedir}/web"/>
 	<property name="compile.debug"       value="true"/>
 	<property name="compile.deprecation" value="false"/>
-	<property name="compile.optimize"    value="true"/>
+	<property name="compile.optimize"    value="false"/>
 
 	<path id="compile.classpath">
 	  <!-- Include all elements that Tomcat exposes to applications -->
@@ -23,9 +23,13 @@
 	    <include name="*.jar"/>
 	  </fileset>
 
+	  <pathelement location="${basedir}/lib"/>
+	  <fileset dir="${basedir}/lib">
+	    <include name="*.jar"/>
+	  </fileset>
 	</path>
 
-  	<taskdef resource="org/apache/catalina/ant/catalina.tasks"
+	<taskdef resource="org/apache/catalina/ant/catalina.tasks"
            classpathref="compile.classpath"/>
 
 	<target name="compile" depends="prepare"
@@ -48,7 +52,7 @@
 
 	</target>
 
-	<target name="dist" depends="compile,javadoc"
+	<target name="dist" depends="compile"
 	 description="Create binary distribution">
 
 	  <!-- Copy documentation subdirectories -->
@@ -104,9 +108,7 @@
 	  <!-- Copy external dependencies as required -->
 	  <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
 	  <mkdir  dir="${build.home}/WEB-INF/lib"/>
-	--
-	  <copy todir="${build.home}/WEB-INF/lib" file="${foo.jar}"/>
-	>
+	  <copy todir="${build.home}/WEB-INF/lib" file="/home/nhinson/mongo-java-driver-2.11.0.jar"/>
 
 	  <!-- Copy static files from external dependencies as needed -->
 	  <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
@@ -121,5 +123,15 @@
 
 	<target name="all" depends="clean,compile"
 	   description="Clean build and dist directories, then compile"/>
+
+	<target name="reload" depends="compile"
+	 description="Reload application on servlet container">
+
+	  <reload url="${manager.url}"
+	     username="${manager.username}"
+	     password="${manager.password}"
+	         path="${app.path}"/>
+
+	</target>
 
 </project>
