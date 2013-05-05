@@ -40,7 +40,8 @@
 	  <javac srcdir="${src.home}"
 	        destdir="${build.home}/WEB-INF/classes"
 	          debug="${compile.debug}"
-	    deprecation="${compile.deprecation}"
+	       deprecation="${compile.deprecation}"
+               includeantruntime="false"
 	       optimize="${compile.optimize}">
 	      <classpath refid="compile.classpath"/>
 	  </javac>
@@ -98,6 +99,7 @@
 	  <mkdir  dir="${build.home}"/>
 	  <mkdir  dir="${build.home}/WEB-INF"/>
 	  <mkdir  dir="${build.home}/WEB-INF/classes"/>
+	  <mkdir  dir="${build.home}/WEB-INF/lib"/>
 
 
 	  <!-- Copy static content of this web application -->
@@ -107,8 +109,9 @@
 
 	  <!-- Copy external dependencies as required -->
 	  <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
-	  <mkdir  dir="${build.home}/WEB-INF/lib"/>
-	  <copy todir="${build.home}/WEB-INF/lib" file="/home/nhinson/mongo-java-driver-2.11.0.jar"/>
+	  <copy todir="${build.home}/WEB-INF/lib">
+	    <fileset dir="${basedir}/lib" />
+          </copy>
 
 	  <!-- Copy static files from external dependencies as needed -->
 	  <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
