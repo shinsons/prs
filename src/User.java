@@ -1,6 +1,7 @@
 import java.util.*;
 import java.lang.Exception;
 
+import org.json.simple.JSONObject;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Transient;
 
@@ -14,7 +15,7 @@ class InvalidRoleException extends Exception {
 public class User {
     
     private String username, first_name, last_name, password;
-    private Set roles;
+    private Set<String> roles;
      
     @Transient    
     private List all_roles;
@@ -91,8 +92,17 @@ public class User {
         roles.remove(role);
     }
 
-    public Set getRoles(){
+    public Set getRoles() {
 	return roles;
+    }
+
+    public JSONObject toJSONObject() {
+	List<String> serializable_roles = new ArrayList<String>(getRoles());
+	JSONObject obj = new JSONObject();
+        obj.put("username", getUsername());
+        obj.put("name", getFullName());
+        obj.put("roles", serializable_roles);
+	return obj; 
     }
 }
 
