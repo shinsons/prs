@@ -79,8 +79,17 @@
 	         path="${app.path}"
 	     localWar="file://${build.home}"/>
 
-	</target>
+		 </target>
 
+
+	<!-- Remove App -->
+	 <target name="remove" description="Remove web application">
+		<undeploy url="${manager.url}" 
+				username="${manager.username}" 
+				password="${manager.password}"
+				path="${app.path}"/>
+	  </target>
+	
 	<target name="javadoc" depends="compile"
 	 description="Create Javadoc API documentation">
 
@@ -118,7 +127,7 @@
 
 	</target>
 
-        <target name="clean"
+    <target name="clean"
 	 description="Delete old build and dist directories">
 	  <delete dir="${build.home}"/>
 	  <delete dir="${dist.home}"/>

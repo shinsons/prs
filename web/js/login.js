@@ -29,13 +29,20 @@ var LoginPanel = function(){
                     password: $('input[name="passwd"]').val()
                    },
             success: function(data){ 
-                    window.location = 'http://localhost:8080/paperreviewsystem/users';
+				$('div.errors').html('')
+				$('div.errors').show();
+				$('div.errors').append(data.success);
+				$('div.errors').fadeOut(5000);
             },
-            error : function(data){
-                    $('div.errors').html('')
-                    $('div.errors').show();
-                    $('div.errors').append("Incorrect credentials");
-                    $('div.errors').fadeOut(5000);
+            error : function(xhrObj){
+				var data = { error : "Unhandled Error" };
+				if(xhrObj.responseText) {
+					data = $.parseJSON(xhrObj.responseText);
+				}
+				$('div.errors').html('')
+				$('div.errors').show();
+				$('div.errors').append(data.error);
+				$('div.errors').fadeOut(5000);
             } 
         });
         e.stopPropagation();
