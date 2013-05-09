@@ -4,11 +4,12 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
+import org.json.simple.JSONObject;
 import com.google.code.morphia.Morphia;
 import com.mongodb.Mongo;
 
-@WebServlet("/service/login") 
-public class Login extends HttpServlet {
+@WebServlet("/service/users") 
+public class UserManagement extends HttpServlet {
 
 	private UserDAO user_ds;
 
@@ -52,7 +53,12 @@ public class Login extends HttpServlet {
 			out.flush();
 			return;
 		}
-
+	 	
+		List selected_users;	
+		Set roles = this_user.getRoles();
+	    if(roles != null && roles.contains("Site Administrator")) {
+			selected_users = user_ds.find().asList();
+		}
 		out.print(this_user.toJSONObject());
 		out.flush();
 		return;

@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Reference;
 import com.google.code.morphia.annotations.Transient;
 
 @Entity
@@ -32,13 +33,18 @@ public class User {
         )
     );
 
+	private Date created;
+
+	@Reference
+	private List<Event> events = new ArrayList<Event>();
+
     public void setFullName(String first, String last) {
         first_name = first;
         last_name = last;
     }
     
     public String getFullName() {
-		return first_name += ' ' + last_name;
+		return first_name + ' ' + last_name;
     }
 
     public void setPassword(String pass) {
@@ -55,6 +61,7 @@ public class User {
 
     public void setUsername(String user) {
         username = user;
+		created = new Date();
     }
 
 	public Address getAddress() {
@@ -98,12 +105,27 @@ public class User {
 		return roles;
     }
 
+	public Date getCreationDate() {
+		return created;
+	}
+
     public JSONObject toJSONObject() {
 		List<String> serializable_roles = new ArrayList<String>(getRoles());
 		JSONObject obj = new JSONObject();
-        	obj.put("username", getUsername());
-        	obj.put("name", getFullName());
-        	obj.put("roles", serializable_roles);
+
+		obj.put("username", getUsername());
+		obj.put("name", getFullName());
+		obj.put("roles", serializable_roles);
+		
+		Address addr = getAddress();
+		if(addr == null) {
+			obj.put("address", new JSONObject());
+		}
+		else {
+			obj.put("address", addr.toJSONObject());
+		}
+
+		obj.put("created", getCreationDate());
 		return obj; 
     }
 }

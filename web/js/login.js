@@ -24,6 +24,7 @@ var LoginPanel = function(){
     this.handle_login = function(e){
         var xhrcall = $.ajax({
             dataType: "json",
+			method: "POST",
             url: "service/login",
             data : {username: $('input[name="username"]').val(),
                     password: $('input[name="passwd"]').val()
